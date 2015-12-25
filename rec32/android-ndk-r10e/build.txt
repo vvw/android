@@ -1,0 +1,26 @@
+E:\Android\android-ndk-r10e>ndk-build APP_ABI=x86 APP_STL=stlport_static -C jni
+ndk-build APP_ABI=armeabi-v7a APP_STL=stlport_static -C jni
+
+adb shell
+adb push 0.bmp /data/user/0/com.example.w7.myapplication/files
+
+删除程序
+adb shell （进入模拟器自带的操作系统）
+cd data/app （切换到apk的安装目录）
+rm ***.apk （用EC切换到DDMS的File Explorer中查看，data/app下）
+
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb install in.apk
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb uninstall com.example.w7.myapplication
+
+
+adb push 0.bmp /data/user/0/com.example.w7.myapplication/files/0.txt
+adb pull /data/user/0/com.example.w7.myapplication/files/0.txt .
+
+
+
