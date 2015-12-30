@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //java.io.File f = getFilesDir();
-                String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+                //String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+                String dir = "/data/data/com.example.w7.myapplication";
                 String fname = dir + "/0.bmp";
                 Log.d ("###################", fname);
                 java.io.File file = new java.io.File(fname);
@@ -44,16 +45,16 @@ public class MainActivity extends AppCompatActivity {
                 // Context.getExternalFilesDir();
                 NdkJniUtils jni = new NdkJniUtils();
                 //String s =  jni.getCLanguageString();
-                String s =  jni.reconize("/data/user/0/com.example.w7.myapplication/files/0.bmp");
+                String s =  jni.reconize(fname);
 
 
-                Snackbar.make(view, "$Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "$Replace with your own action#" + s.length(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Log.d("###################", s);
                 //s.length();
                 try
                 {
-                    java.io.FileWriter writer=new java.io.FileWriter("/data/user/0/com.example.w7.myapplication/files/0.txt");
+                    java.io.FileWriter writer=new java.io.FileWriter(dir + "/0.txt");
                     writer.write(s);
                     writer.close();
                     Log.d("###################", "write json success.");

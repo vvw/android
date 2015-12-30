@@ -1,0 +1,401 @@
+
+G:\Users\w7\AndroidStudioProjects\MyApplication
+
+@echo off
+E:
+cd E:\Android\AppData\Local\Android\sdk\platform-tools
+cmd.exe
+
+String dir = "/data/data/com.example.w7.myapplication";
+String fname = dir + "/0.bmp";
+
+adb shell
+cat /data/data/com.example.w7.myapplication/0.txt
+adb push 0.bmp /data/data/com.example.w7.myapplication
+adb pull /data/data/com.example.w7.myapplication/0.txt  ttttttttttzzzzzzzz.txt
+
+Android默认是无法直接操作Data根目录和相关的目录，只能直接读写程序自己的私有目录，也就是/data/data/Package name/ ,默认只能操作这个目录
+
+
+新版题卡识别代码
+
+E:\Android\android-ndk-r10e>ndk-build APP_ABI=x86 APP_STL=stlport_static -C jni2
+ndk-build APP_ABI=armeabi-v7a APP_STL=stlport_static -C jni
+
+adb shell
+adb push 0.bmp /data/data/com.example.w7.myapplication
+adb push IMAG0001.bmp /data/data/com.example.w7.myapplication
+
+
+删除程序
+adb shell （进入模拟器自带的操作系统）
+cd data/app （切换到apk的安装目录）
+rm ***.apk （用EC切换到DDMS的File Explorer中查看，data/app下）
+
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb install in.apk
+adb install app-release.apk
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb uninstall com.example.w7.myapplication
+
+
+adb push 0.bmp /data/user/0/com.example.w7.myapplication/files/0.txt
+adb pull /data/user/0/com.example.w7.myapplication/files/0.txt .
+
+
+EXP_API typedef struct ImageData{
+	int bpp;
+	int stride;
+	int width;
+	int height;
+	unsigned char * bits;
+}ImageData;
+
+bits 的字节数 = stride * height 这样对了吧
+威王软件 2015/2/13 14:08:39
+对
+
+
+增加到100道题需要改的地方
+
+先备份目前工程所有文件。
+根据以下文字找到需要改的地方进行修改。
+AllSePoints *	getExamSheetAllSePoints(ImageData * img,Indication * indication){
+	if(asp->leftB.count!=asp->rightB.count || asp->rightB.count!=20){//改成20
+		deleteAllSePoints(asp);
+		return NULL;
+	}
+}
+
+------------------------------------------------------------------------------------
+
+char *			readExamSheetImage(ESRContext * esrContext){
+	/*************************答案******************************/
+	//1-5
+	for(i=0;i<5;i++){//每个这样的循环读五道题
+		for(j=15+4;j>11+4;j--){//类似这句的全部加上4，变成for(j=19;j>15;j--){
+		}
+	}
+	//增加80-100题的阅读代码
+	//80-85
+	for(i=0;i<5;i++){
+		for(j=3;j>=0;j--){
+		}
+	}
+	//85-90
+	for(i=6;i<11;i++){
+		for(j=3;j>=0;j--){
+		}
+	}
+	//90-95
+	for(i=12;i<17;i++){
+		for(j=3;j>=0;j--){
+		}
+	}
+	//95-100
+	for(i=18;i<23;i++){
+		for(j=3;j>=0;j--){
+		}
+	}
+}
+
+
+String dir = "/data/data/com.example.w7.myapplication";
+String fname = dir + "/0.bmp";
+
+adb shell
+cat /data/data/com.example.w7.myapplication/0.txt
+adb push 0.bmp /data/data/com.example.w7.myapplication
+adb pull /data/data/com.example.w7.myapplication/0.txt  ttttttttttzzzzzzzz.txt
+
+G:\Users\w7\AndroidStudioProjects\MyApplication
+
+@echo off
+E:
+cd E:\Android\AppData\Local\Android\sdk\platform-tools
+cmd.exe
+
+
+Android默认是无法直接操作Data根目录和相关的目录，只能直接读写程序自己的私有目录，也就是/data/data/Package name/ ,默认只能操作这个目录
+
+
+E:\Android\android-ndk-r10e>ndk-build -C jni
+ndk-build APP_ABI=x86
+ndk-build APP_ABI=armeabi-v7a APP_STL=stlport_static -C jni
+Use armeabi-v7a and x86, or use all
+
+jnitest.c
+ #include "jni.h"
+JNIEXPORT jstring JNICALL Java_com_example_w7_myapplication_NdkJniUtils_getCLanguageString
+  (JNIEnv *env, jobject obj){
+     return (*env)->NewStringUTF(env,"This just a test for Android Studio NDK JNI developer!");
+  }
+
+NdkJniUtils.java
+package com.example.w7.myapplication;
+// javah -jni com.example.w7.myapplication.NdkJniUtils
+public class NdkJniUtils {
+    static {
+        System.loadLibrary("JniLibName");    //defaultConfig.ndk.moduleName
+    }
+    public native String getCLanguageString();
+}
+
+MainActivity.java
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //java.io.File f = getFilesDir();
+                String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+                String fname = dir + "/0.bmp";
+                Log.d ("###################", fname);
+                java.io.File file = new java.io.File(fname);
+                if (file.exists()) {
+                    Log.d ("###################", "exists: " + fname);
+                    android.graphics.Bitmap bm = android.graphics.BitmapFactory.decodeFile(fname);
+                    int w = bm.getWidth();
+                    int h = bm.getHeight();
+                    Log.d ("###################", "width,htight=" + w + "," + h);
+                    //将图片显示到ImageView中
+                    //img.setImageBitmap(bm);
+                } else {
+                    Log.d ("###################", "not exists: " + fname);
+                }
+                // Context.getExternalFilesDir();
+                NdkJniUtils jni = new NdkJniUtils();
+                String s =  jni.getCLanguageString();
+                Snackbar.make(view, s + "$Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+/data/user/0/com.example.w7.myapplication/files/0.bmp
+
+For example, an app may have the following modules:
+ 
+libfoo.so
+libbar.so which is used by libfoo.so
+libstlport_shared.so, used by both libfoo and libbar
+You must load the libraries in reverse dependency order:
+ 
+    static {
+      System.loadLibrary("stlport_shared");
+      System.loadLibrary("bar");
+      System.loadLibrary("foo");
+    }
+Note: Do not use the lib prefix when calling System.loadLibrary().
+https://developer.android.com/ndk/guides/cpp-support.html
+
+
+要修改的apk 命名为in.apk 放在当前目录
+1. 双击cmd.bat
+2. 输入unpack 回车，解包
+3. 修改源文件
+4. 输入pack 回车，打包
+ 
+删除程序
+adb shell （进入模拟器自带的操作系统）
+cd data/app （切换到apk的安装目录）
+rm ***.apk （用EC切换到DDMS的File Explorer中查看，data/app下）
+
+
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb install in.apk
+
+@echo off
+path=%path%;C:\android-studio\sdk\platform-tools
+adb uninstall com.example.w7.myapplication
+
+
+adb install app-release.apk
+
+
+
+ndk-build APP_ABI=armeabi-v7a APP_STL=stlport_static -C jni
+Android.mk
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+ 
+LOCAL_MODULE := freeimage
+LOCAL_CPP_FEATURES += exceptions
+LOCAL_LDFLAGS := -Wl,--build-id
+LOCAL_SRC_FILES := \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\Conversion8.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\BitmapAccess.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\PixelAccess.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\Plugin.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\GetType.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\Metadata\FreeImageTag.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\FreeImage.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\Metadata\TagLib.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\FreeImageIO.cpp \
+    E:\Android\android-ndk-r10e\jni\FreeImage\Source\FreeImage\PluginBMP.cpp \
+ 
+LOCAL_C_INCLUDES += E:\Android\android-ndk-r10e\jni\FreeImage\Source
+LOCAL_C_INCLUDES += E:\Android\android-ndk-r10e\jni\FreeImage\Source
+ 
+include $(BUILD_SHARED_LIBRARY)
+
+
+mksdcard 1024M sdcard.img
+
+adb sehll
+ls 
+cd /mnt/sdcard
+
+各种目录
+https://gist.github.com/granoeste/5574148
+
+
+APP_STL := stlport_static
+ 
+should be set in Application.mk, not in Android.mk
+ 
+Or you can set it on command line, e.g.
+ 
+ndk-build APP_STL=stlport_static
+
+
+C++ support with the Android NDK
+================================
+ 
+ 
+The Android platform provides a very minimal C++ runtime support library
+(/system/lib/libstdc++) and corresponding headers for it in the NDK.
+ 
+I. C++ Exceptions support:
+--------------------------
+ 
+The NDK toolchain supports C++ exceptions, since NDK r5, however all C++
+sources are compiled with -fno-exceptions support by default, for
+compatibility reasons with previous releases.
+ 
+To enable it, use the '-fexceptions' C++ compiler flag. This can be done
+by adding the following to every module definition in your Android.mk:
+ 
+    LOCAL_CPPFLAGS += -fexceptions
+ 
+More simply, add a single line to your Application.mk, the setting will
+automatically apply to all your project's NDK modules:
+ 
+    APP_CPPFLAGS += -fexceptions
+ 
+NOTE: The obsolete "arm-eabi-4.4.0" toolchain provided for backwards
+      compatibility with this NDK does not support exceptions!
+ 
+ 
+II. RTTI support:
+------------------
+ 
+Similarly, the NDK toolchain supports C++ RTTI (RunTime Type Information)
+since NDK r5, but all C++ sources are built with -fno-rtti by default for
+compatibility reasons. To enable it, add the following to your module
+declarations:
+ 
+    LOCAL_CPPFLAGS += -frtti
+ 
+Or more simply to your Application.mk:
+ 
+    APP_CPPFLAGS += -frtti
+ 
+ 
+NOTE: The obsolete "arm-eabi-4.4.0" toolchain provided for backwards
+      compatibility with this NDK does not support RTTI!
+ 
+ 
+III. Selecting the C++ Standard Library Implementation:
+-------------------------------------------------------
+ 
+By default, the headers and libraries for the minimal C++ runtime system
+library (/system/lib/libstdc++.so) are used when building C++ sources.
+ 
+You can however select a different implementation by setting the variable
+APP_STL to something else in your Application.mk, for example:
+ 
+  APP_STL := stlport_static
+ 
+To select the static STLport implementation provided with this NDK.
+Value APP_STL values are the following:
+ 
+   system              -> Use the default minimal C++ runtime library.
+   stlport_static      -> Use STLport built as a static library.
+   stlport_shared      -> Use STLport built as a shared library.
+ 
+WARNING: IMPORTANT CAVEAT
+ 
+     AT THE MOMENT, OUR STLPORT IMPLEMENTATION DOES NOT SUPPORT EXCEPTIONS
+     AND RTTI. PLEASE BE SURE TO NOT USE -fexceptions OR -frtti IN ALL
+     MODULES THAT USE IT.
+ 
+WARNING: END OF IMPORTANT CAVEAT
+ 
+  "stlport_shared" is preferred if you have several shared libraries in your
+  project that use the C++ STL, because it avoids duplication of functions
+  and more importantly of global variables (e.g. std::cout) in each one of
+  them, which can have surprising results.
+ 
+  On the other hand, you will have to load it explicitely when starting your
+  application, as in the following example:
+ 
+     static {
+         System.loadLibrary("stlport_shared");
+         System.loadLibrary("foo");
+         System.loadLibrary("bar");
+     }
+ 
+  Where both "libfoo.so" and "libbar.so" depend on "libstlport_shared.so".
+ 
+  Note that the shared library's name if "libstlport_shared.so" to avoid
+  naming conflicts with certain Android system images which include a
+  system-level libstlport.so (which happens to not be ABI-stable and
+  cannot be used from NDK-generated machine code).
+ 
+  "stlport_static" is preferred if you have only one shared library in your
+  project: only the STL functions and variables you actually need will be
+  linked to your machine code, reducing its code size, and you won't need
+  to load the dynamic stlport_shared at startup.
+ 
+ 
+IV. STLport-specific issues:
+----------------------------
+ 
+This NDK provides prebuilt static and shared libraries for STLport,
+but you can force it to be rebuilt from sources by defining the following
+in your environment or your Application.mk before building:
+ 
+    STLPORT_FORCE_REBUILD := true
+ 
+STLport is licensed under a BSD-style open-source license. See
+sources/cxx-stl/stlport/README for more details about the library.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
